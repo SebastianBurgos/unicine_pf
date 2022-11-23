@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:jsf="http://java.sun.com/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{detallePeliculaBean.pelicula.nombre}</ui:define>
+
+    <ui:define name="contenido">
+
+        <div class="contenido_pagina">
+
+            <div id="descripcion_pelicula" class="izquierda shadow p-3">
+
+                <img src="#{detallePeliculaBean.pelicula.imagenPrincipal}" alt="Poster película"/>
+
+                <h5 style="margin-top: 15px">Título de la película</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.nombre}" />
+
+                <h5 style="margin-top: 15px">Género/s</h5>
+                <p:outputLabel value="#{detallePeliculaBean.generosPelicula}" />
+
+                <h5 style="margin-top: 15px">Sinopsis</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.sinopsis}" />
+
+                <h5 style="margin-top: 15px">Director/es</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.nombreDirector}" />
+
+                <h5 style="margin-top: 15px">Estudio/productora</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.nombreEstudio}" />
+
+                <h5 style="margin-top: 15px">Reparto</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.reparto}" />
+
+                <h5 style="margin-top: 15px">Duración</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.duracionMinutos}" />
+
+                <h5 style="margin-top: 15px">Clasificación (Edad apropiada)</h5>
+                <p:outputLabel value="#{detallePeliculaBean.pelicula.edadApropiada}" />
+            </div>
+
+            <div id="trailer_funciones" class="derecha shadow p-3">
+
+                <div style="align-content: center; width: 800px">
+                    <iframe width="775" height="500" src="#{detallePeliculaBean.pelicula.trailer}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+                </div>
+
+                <div class="p-3">
+                    <h5 style="margin-top: 15px; margin-bottom: 15px">Elige dónde y cuándo ver tu función: </h5>
+                    <div style="display: flex">
+
+                        <h:form id="seleccionar_ciudad" styleClass="align-self-start">
+                            <p:panelGrid columns="3" cellpadding="5" >
+                                <p:outputLabel for="ciudad_origen" value="Ciudad: "/>
+
+                                <p:selectOneMenu id="ciudad_origen" value="#{detallePeliculaBean.ciudad}" converter="#{ciudadConverter}">
+                                    <f:selectItem itemLabel="Elige la ciudad de la función: " noSelectionOption="true"
+                                                  itemValue="#{null}"/>
+                                    <f:selectItems value="#{detallePeliculaBean.ciudades}" var="ciudad" itemLabel="#{ciudad.nombre}"
+                                                   itemValue="#{ciudad}"/>
+                                    <p:ajax event="change" listener="#{detallePeliculaBean.actualizarTeatros()}" update="@form, seleccionar_teatro, lista-funciones" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </h:form>
+
+                        <h:form id="seleccionar_teatro" style="margin-left: 2%">
+                            <p:panelGrid columns="3" cellpadding="5" >
+                                <p:outputLabel for="teatro_funcion" value="Teatro: "/>
+                                <p:selectOneMenu id="teatro_funcion" value="#{detallePeliculaBean.teatro}" converter="#{teatroConverter}">
+                                    <f:selectItem itemLabel="Elige un teatro: " noSelectionOption="true"
+                                                  itemValue="#{null}"/>
+                                    <f:selectItems value="#{detallePeliculaBean.teatros}" var="teatro" itemLabel="#{teatro.nombre}"
+                                                   itemValue="#{teatro}"/>
+                                    <p:ajax event="change" listener="#{detallePeliculaBean.actualizarFunciones()}" update="@form, seleccionar_ciudad, lista-funciones" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+
+                    <div class="mt-3" >
+
+                        <div id="funciones_dia" >
+                            <div class="p-1 " style="text-align: left; align-content: center; align-items: center" >
+                                <h:form>
+                                    <p:outputLabel for="event" value="Elige la fecha de la función: " style="margin-right: 2%"/>
+                                    <p:datePicker id="event" value="#{detallePeliculaBean.fecha}" mindate="#{detallePeliculaBean.fechaMinima}" maxdate="#{detallePeliculaBean.fechaMaxima}">
+                                        <p:ajax event="dateSelect" listener="#{detallePeliculaBean.filtrarFunciones(detallePeliculaBean.fecha)}" update="@form, lista-funciones"/>
+                                    </p:datePicker>
+                                </h:form>
+                            </div>
+                        </div>
+
+                        <h:form id="lista-funciones">
+                            <div>
+                                <h5 style="margin-top: 15px">Funciones: </h5>
+                            </div>
+                            <p:staticMessage rendered="#{(detallePeliculaBean.funcionesFiltradas.size() == 0) ? 'true' : 'false' }" severity="info" summary="INFO" detail="No hay funciones para mostrar" style="width: 100%; margin-top: 10px"/>
+                            <div style="display: flex">
+                                <p:repeat value="#{detallePeliculaBean.funcionesFiltradas}" var="funcion">
+                                    <div class="item-func mb-4">
+                                        <div class="shadow-sm p-4" >
+                                            <p>#{funcion.sala.tipoSala.nombre}</p>
+                                            <p:commandButton value="#{funcion.horario.hora}" action="#{detallePeliculaBean.realizarProcesoCompra(funcion)}" update="@form"/>
+                                        </div>
+                                    </div>
+                                </p:repeat>
+                            </div>
+                            <p:growl for="funciones" showDetail="true" sticky="true" />
+                        </h:form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="/WEB-INF/template_admin_teatros.xhtml">
+
+    <ui:define name="contenido">
+
+    <h:form id="crud_salas">
+
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success me-3" action="#{salaBean.crearSalaDialogo()}" update="dialogo_sala" oncomplete="PF('crear_sala').show()" />
+                <p:commandButton id="btn_borrar" value="#{salaBean.mensajeBorrar}" icon="pi pi-trash" disabled="#{salaBean.salasSeleccionadas.size()==0 }" styleClass="ui-button-danger" action="#{salaBean.eliminarSalas()}" update="crud_salas:lista, @this" />
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="lista" value="#{salaBean.salas}" var="sala" paginator="true" rows="10"
+                     rowKey="#{sala.codigo}" paginatorPosition="bottom"
+                     selection="#{salaBean.salasSeleccionadas}"
+                     rowSelectMode="add" >
+
+            <p:ajax event="rowSelect" update="crud_salas:btn_borrar" />
+            <p:ajax event="rowUnselect" update="crud_salas:btn_borrar" />
+            <p:ajax event="rowSelectCheckbox" update="crud_salas:btn_borrar" />
+            <p:ajax event="rowUnselectCheckbox" update="crud_salas:btn_borrar" />
+            <p:ajax event="toggleSelect" update="crud_salas:btn_borrar" />
+
+            <p:column selectionMode="multiple" exportable="false" />
+
+            <p:column headerText="Código">
+                <h:outputText value="#{sala.codigo}" />
+            </p:column>
+
+            <p:column headerText="Numero">
+                <h:outputText value="#{sala.numero}" />
+            </p:column>
+
+            <p:column headerText="Distribucion de Sillas">
+                <h:outputText value="#{sala.distribucionSillas.esquemaSillas}" />
+            </p:column>
+
+            <p:column headerText="Teatro">
+                <h:outputText value="#{sala.teatro.nombre}" />
+            </p:column>
+
+            <p:column headerText="Tipo de Sala">
+                <h:outputText value="#{sala.tipoSala.nombre}" />
+            </p:column>
+
+            <p:column headerText="">
+                <p:commandButton styleClass="edit-button rounded-button ui-button-success" icon="pi pi-pencil" action="#{salaBean.seleccionarTeatro(sala)}" oncomplete="PF('crear_sala').show()" update="dialogo_sala" />
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+    <p:dialog id="dialogo_sala" widgetVar="crear_sala" modal="true" header="#{salaBean.mensajeDialogo}" showEffect="fade" >
+        <h:form >
+            <h:panelGrid columns="3" cellpadding="5">
+
+                <p:outputLabel for="numero_sala" value="Numero de sala: " />
+                <p:inputText id="numero_sala" value="#{salaBean.sala.numero}" required="true"/>
+                <p:message for="numero_sala"/>
+
+                <p:outputLabel for="distribucion_sillas" value="Distribucion de Sillas: " />
+
+                <p:selectOneMenu id="distribucion_sillas" value="#{salaBean.sala.distribucionSillas}" converter="#{distribucionSillasConverter}" required="true">
+                    <f:selectItem itemLabel="Seleccione una distribución de sillas" noSelectionOption="true" itemValue="#{null}" />
+                    <f:selectItems value="#{salaBean.distribucionesSillas}" var="distribucion_sillas" itemLabel="#{distribucion_sillas.codigo}" itemValue="#{distribucion_sillas}" />
+                </p:selectOneMenu>
+
+                <p:message for="distribucion_sillas"/>
+
+                <p:outputLabel for="teatro_sala" value="Teatro Perteneciente: " />
+
+                <p:selectOneMenu id="teatro_sala" value="#{salaBean.sala.teatro}" converter="#{teatroConverter}" required="true">
+                    <f:selectItem itemLabel="Seleccione un teatro" noSelectionOption="true" itemValue="#{null}" />
+                    <f:selectItems value="#{salaBean.teatros}" var="teatro" itemLabel="#{teatro.nombre}" itemValue="#{teatro}" />
+                </p:selectOneMenu>
+
+                <p:message for="teatro_sala"/>
+
+                <p:outputLabel for="tipo_sala" value="Tipo de Sala: " />
+
+                <p:selectOneMenu id="tipo_sala" value="#{salaBean.sala.tipoSala}" converter="#{tipoSalaConverter}" required="true">
+                    <f:selectItem itemLabel="Seleccione un tipo de sala" noSelectionOption="true" itemValue="#{null}" />
+                    <f:selectItems value="#{salaBean.tiposSala}" var="tipoSala" itemLabel="#{tipoSala.nombre}" itemValue="#{tipoSala}" />
+                </p:selectOneMenu>
+
+                <p:message for="tipo_sala"/>
+
+            </h:panelGrid>
+
+            <p:commandButton action="#{salaBean.crearSala()}" value="#{salaBean.mensajeDialogo}" update="@form,crud_salas:lista" />
+            <p:growl for="mensaje_bean" showDetail="true" />
+        </h:form>
+    </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>

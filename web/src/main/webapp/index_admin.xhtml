@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template_index_admin.xhtml">
+
+    <ui:define name="contenido">
+            <p:panel header="Inicio de Sesion de Administradores" style="align-self: center; align-content: center; text-align: center; margin-top: 10px">
+                <h:form>
+
+                    <div class="container iniciar-sesion" >
+                        <div style="align-self: center; align-content: center; text-align: center">
+                            <p:outputLabel for="correo" value="Correo:" styleClass="me-4"/>
+                            <p:inputText id="correo" value="#{seguridadBean.email}" required="true"/>
+                            <p:message for="correo"/>
+                        </div>
+
+                        <div style="align-self: center; align-content: center; text-align: center; margin-top: 10px">
+                            <p:outputLabel for="password_login" value="Password:" styleClass="me-3" />
+                            <p:password id="password_login" value="#{seguridadBean.password}" required="true"/>
+                            <p:message for="password_login"/>
+                        </div>
+
+                        <p:commandButton value="Iniciar Sesión" action="#{seguridadBean.iniciarSesionAdmin()}"
+                                         styleClass="mt-4" update="@form, barra_nav" icon="pi pi-sign-in" iconPos="left"/>
+
+                        <p:growl for="login-bean" showDetail="true"/>
+
+                    </div>
+
+                </h:form>
+
+            </p:panel>
+    </ui:define>
+
+</ui:composition>
+</html>

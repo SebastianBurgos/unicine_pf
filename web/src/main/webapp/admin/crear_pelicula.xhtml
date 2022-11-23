@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Crear película</title>
+</h:head>
+
+<h:body>
+
+    <p:panel header="Crear película">
+        <h:form >
+            <h:panelGrid columns="3" cellpadding="5">
+
+                <p:outputLabel for="nombre_pelicula" value="Nombre de la película: " />
+                <p:inputText id="nombre_pelicula" value="#{peliculaBean.pelicula.nombre}" required="true"/>
+                <p:message for="nombre_pelicula"/>
+
+                <p:outputLabel for="nombre_director" value="Nombre del director: " />
+                <p:inputText id="nombre_director" value="#{peliculaBean.pelicula.nombreDirector}" required="true" />
+                <p:message for="nombre_director"/>
+
+                <p:outputLabel for="nombre_estudio" value="Nombre del estudio: " />
+                <p:inputText id="nombre_estudio" value="#{peliculaBean.pelicula.nombreEstudio}" required="true" />
+                <p:message for="nombre_estudio"/>
+
+                <p:outputLabel for="sinopsis" value="Sinopsis: " />
+                <p:inputText id="sinopsis" value="#{peliculaBean.pelicula.sinopsis}" required="true" />
+                <p:message for="sinopsis"/>
+
+                <p:outputLabel for="edad_apropiada" value="Edad apropiada: " />
+                <p:inputText id="edad_apropiada" value="#{peliculaBean.pelicula.edadApropiada}" required="true" />
+                <p:message for="edad_apropiada"/>
+
+                <p:outputLabel for="duracion" value="Duración (En minutos): " />
+                <p:inputText id="duracion" value="#{peliculaBean.pelicula.duracionMinutos}" required="true" />
+                <p:message for="duracion"/>
+
+                <p:outputLabel for="imagen_pelicula" value="Imágenes: " />
+                <p:fileUpload id="imagen_pelicula" listener="#{peliculaBean.subirImagenes}" mode="advanced"
+                multiple="true" sizeLimit="1000000" fileLimit="2" allowTypes="/(.|\/)(gif|jpe?g|png)$/" required="true"  />
+                <p:message for="imagen_pelicula"/>
+
+                <p:outputLabel for="url_trailer" value="Url del trailer: " />
+                <p:inputText id="url_trailer" value="#{peliculaBean.pelicula.trailer}" required="true" />
+                <p:message for="url_trailer"/>
+
+                <p:outputLabel for="generos_pelicula" value="Géneros: " />
+                <p:selectManyCheckbox id="generos_pelicula" value="#{peliculaBean.pelicula.generos}" layout="grid" columns="4" >
+                <f:selectItems value="#{peliculaBean.generos}" var="genero" itemLabel="#{genero}" itemValue="#{genero}" />
+                </p:selectManyCheckbox>
+                <p:message for="generos_pelicula"/>
+
+
+            </h:panelGrid>
+
+            <p:commandButton action="#{peliculaBean.crearPelicula()}" value="Crear pelicula" update="@form" />
+            <p:growl for="mensaje_bean" showDetail="true" />
+        </h:form>
+    </p:panel>
+
+</h:body>
+</html>
