@@ -1,21 +1,15 @@
 package co.edu.uniquindio.unicine.test;
 
-import ch.qos.logback.core.CoreConstants;
 import co.edu.uniquindio.unicine.entidades.Cliente;
-import co.edu.uniquindio.unicine.entidades.Compra;
 import co.edu.uniquindio.unicine.entidades.Cupon;
 import co.edu.uniquindio.unicine.repositorios.ClienteRepo;
-import co.edu.uniquindio.unicine.servicios.EmailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

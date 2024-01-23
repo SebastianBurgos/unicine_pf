@@ -28,6 +28,9 @@ public class TeatroBean implements Serializable {
     private List<Ciudad> ciudades;
 
     @Getter @Setter
+    private Ciudad ciudadTeatro;
+
+    @Getter @Setter
     private List<Teatro> teatros;
 
     @Getter @Setter

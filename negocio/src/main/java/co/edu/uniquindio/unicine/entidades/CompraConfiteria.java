@@ -19,10 +19,10 @@ public class CompraConfiteria implements Serializable {
     private Integer codigo;
 
     @Column(nullable = true)
-    private Float precio;
+    private Integer precio;
 
     @Column(nullable = false)
-    private int unidades;
+    private Integer unidades;
 
     //Relaciones
     @ToString.Exclude
@@ -34,10 +34,15 @@ public class CompraConfiteria implements Serializable {
     private Compra compra;
 
     @Builder
-    public CompraConfiteria(Float precio, int unidades, ProductoConfiteria productoConfiteria, Compra compra) {
-        this.precio = precio;
+    public CompraConfiteria(int unidades, ProductoConfiteria productoConfiteria, Compra compra) {
+
         this.unidades = unidades;
         this.productoConfiteria = productoConfiteria;
         this.compra = compra;
+        actualizarPrecio();
+    }
+
+    public void actualizarPrecio() {
+        precio = productoConfiteria.getPrecio()*unidades;
     }
 }

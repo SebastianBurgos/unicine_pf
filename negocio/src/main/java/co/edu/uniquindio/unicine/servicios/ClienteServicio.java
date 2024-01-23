@@ -2,6 +2,7 @@ package co.edu.uniquindio.unicine.servicios;
 
 import co.edu.uniquindio.unicine.entidades.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -24,14 +25,6 @@ public interface ClienteServicio {
     //TODO corregir el servicio
     List<Compra> listarHistorialCompras(String cedulaCliente) throws Exception;
 
-    Compra iniciarCompra(Cliente cliente, Funcion funcion) throws Exception;
-
-    Compra asignarEntrada(Compra compra, List<Entrada> entradas) throws Exception;
-
-    Compra asignarComprasConfiteria(Compra compra, List<CompraConfiteria> comprasConfiteria) throws Exception;
-
-    Compra asignarPago(Compra compra, MedioPago medioPago, ClienteCupon clienteCupon) throws Exception;
-
     Compra realizarCompra(Compra compra) throws Exception;
 
     void cancelarCompra(Integer idCompra) throws Exception;
@@ -47,5 +40,13 @@ public interface ClienteServicio {
 
     void activarCuenta(String param1) throws Exception;
 
+    void reestablecerContrasenia(String correo, String contraseniaNueva) throws Exception;
 
+    List<ProductoConfiteria> obtenerProductosConfiteria();
+
+    List<Entrada> obtenerEntradasFuncion(Funcion funcion, LocalDate fechaFuncion) throws Exception;
+
+    void guardarEntrada(Entrada entrada) throws Exception;
+
+    void guardarCompraConfiteria(CompraConfiteria compraConfiteria);
 }

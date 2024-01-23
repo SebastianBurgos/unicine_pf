@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AdministradorPlataformaRepo extends JpaRepository<AdministradorPlataforma, String> {
 
-    @Query("select ap from AdministradorPlataforma ap where ap.cedula = :cedula and ap.contrasenia = :contrasenia")
-    AdministradorPlataforma comprobarAutenticacion(String cedula, String contrasenia);
+    @Query("select ap from AdministradorPlataforma ap where ap.email = :email and ap.contrasenia = :contrasenia")
+    AdministradorPlataforma comprobarAutenticacion(String email, String contrasenia);
 
 }

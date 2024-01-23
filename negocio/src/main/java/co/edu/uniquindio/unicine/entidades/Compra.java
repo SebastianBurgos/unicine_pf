@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,36 +23,33 @@ public class Compra implements Serializable {
     @EqualsAndHashCode.Include
     private Integer codigo;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Float precioTotal;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalDateTime fechaCompra;
 
+    @Column(nullable = false)
+    private LocalDate fechaFuncion;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true, length = 15)
-    @NonNull
+    @Column(nullable = false, length = 15)
     private MedioPago medioDePago;
 
     @Column(nullable = false)
-    private Integer estado;
-
-    @Column(nullable = false)
-    private LocalDateTime fechaPelicula;
+    private String estado;
 
     //Relaciones
 
-    @OneToOne(mappedBy = "compra")
+    @OneToOne
     private ClienteCupon clienteCupon;
 
     @OneToMany(mappedBy = "compra")
     private List<Entrada> entradas;
 
-    @NonNull
     @ManyToOne
     private Cliente cliente;
 
-    @NonNull
     @ManyToOne
     private Funcion funcion;
 
@@ -59,16 +57,18 @@ public class Compra implements Serializable {
     private List<CompraConfiteria> comprasConfiteria;
 
     @Builder
-    public Compra(MedioPago medioDePago, ClienteCupon clienteCupon, List<Entrada> entradas, Cliente cliente,
+    public Compra(MedioPago medioDePago, LocalDate fechaFuncion, ClienteCupon clienteCupon, List<Entrada> entradas, Cliente cliente,
                   Funcion funcion, List<CompraConfiteria> comprasConfiteria) {
         this.fechaCompra = LocalDateTime.now();
         this.medioDePago = medioDePago;
+        this.fechaFuncion = fechaFuncion;
         this.clienteCupon = clienteCupon;
         this.entradas = entradas;
         this.cliente = cliente;
         this.funcion = funcion;
         this.comprasConfiteria = comprasConfiteria;
-        this.estado = 0;
+        this.estado = "CREADA";
+        actualizarPrecioTotal();
     }
 
     public void actualizarPrecioTotal() {
@@ -76,10 +76,14 @@ public class Compra implements Serializable {
         float valorEntradas = 0;
         float valorConfiteria = 0;
 
-        valorEntradas = entradas.size() * funcion.getPrecio();
+        if (funcion != null) {
+            valorEntradas = entradas.size() * funcion.getPrecio();
+        }
 
-        for (CompraConfiteria compraConfiteria : comprasConfiteria) {
-            valorConfiteria += compraConfiteria.getPrecio();
+        if (comprasConfiteria != null) {
+            for (CompraConfiteria compraConfiteria : comprasConfiteria) {
+                valorConfiteria += compraConfiteria.getPrecio();
+            }
         }
 
         if (clienteCupon != null) {

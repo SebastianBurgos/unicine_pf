@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +41,14 @@ public interface FuncionRepo extends JpaRepository<Funcion, Integer> {
 
    @Query("select f.precio from Funcion f where f.codigo=:codigoFuncion")
    Integer obtenerPrecionFuncion(Integer codigoFuncion);
-   @Query("select c.entradas from Compra c where c.funcion.codigo = :codigoFuncion")
-   List<Entrada> obtenerEntradasFuncion(Integer codigoFuncion);
-   Optional<Funcion> findByCodigo(Integer codigo);
 
+   Optional<Funcion> findByCodigo(Integer codigo);
    @Query("select f from Funcion f where f.pelicula.codigo = :codigoPelicula and f.sala.teatro.ciudad.codigo = :codigoCiudad")
    List<Funcion> obtenerFuncionesPorCiudadPelicula(Integer codigoPelicula, Integer codigoCiudad);
+
+   @Query("select e from Compra c join c.entradas e where c.funcion.codigo = :codigoFuncion and c.fechaFuncion = :fechaFuncion")
+   List<Entrada> obtenerEntradasFuncion(Integer codigoFuncion, LocalDate fechaFuncion);
+
+   @Query("select f from Funcion f where f.pelicula.codigo = :codigoPelicula and f.sala.teatro.codigo = :codigoTeatro")
+   List<Funcion> obtenerFuncionesPorTeatroPelicula(Integer codigoPelicula, Integer codigoTeatro);
 }

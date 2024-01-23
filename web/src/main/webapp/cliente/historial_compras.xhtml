@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:jsf="http://java.sun.com/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml" >
+
+    <ui:define name="title">Historial de compras</ui:define>
+
+    <ui:define name="contenido">
+        <div class="container">
+            <div class="row mt-4 mb-4" >
+                <p:panel header="Historial de compras">
+                    <p:repeat value="#{historialComprasBean.comprasCliente}" var="compra" >
+                        <div style="display: compact">
+                            <a href="detalle_compra.xhtml?compra_id=#{compra.codigo}">
+                                <p:card style="align-content: center; align-items: center">
+                                    <div>
+                                        <div >
+                                            <strong class="d-inline-block me-2">Código de la compra: </strong>
+                                            <p:barcode value="#{compra.codigo.toString()}" type="qr" width="125" height="125"/>
+                                        </div>
+                                        <div>
+                                            <strong class="d-inline-block me-2 mt-2">Pelicula: </strong> <p:outputLabel value="#{compra.funcion.pelicula.nombre}" />
+                                        </div>
+                                        <div>
+                                            <strong class="d-inline-block me-2 mt-2">Horario: </strong> <p:outputLabel value="#{compra.fechaFuncion}, Hora: #{compra.funcion.horario.hora}" />
+                                        </div>
+                                        <div>
+                                            <strong class="d-inline-block me-2 mt-2">Ubicación: </strong> <p:outputLabel value="#{compra.funcion.sala.teatro.ciudad.nombre} - #{compra.funcion.sala.teatro.nombre}" />
+                                        </div>
+                                        <div>
+                                            <strong class="d-inline-block me-2 mt-2">Sala: </strong> <p:outputLabel value="#{compra.funcion.sala.numero}" />
+                                        </div>
+                                        <div>
+                                            <strong class="d-inline-block me-2 mt-2">Total: </strong> <p:outputLabel value="$#{compra.precioTotal}" />
+                                        </div>
+                                    </div>
+                                </p:card>
+                            </a>
+                            <hr />
+                        </div>
+                    </p:repeat>
+                </p:panel>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+
+</html>

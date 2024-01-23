@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AdministradorPlataformaServicio {
 
-    AdministradorPlataforma login(String cedula, String contrasenia) throws Exception;
+    AdministradorPlataforma login(String email, String contrasenia);
 
     // Gestion de Administradores de Teatro
 
@@ -56,6 +56,12 @@ public interface AdministradorPlataformaServicio {
 
     List<Cupon> listarCuponesPorDescuento(Float descuento);
 
+    ClienteCupon asignarCupon(ClienteCupon clienteCupon);
+
+    List<ClienteCupon> listarClienteCupones();
+
+    ClienteCupon obtenerClienteCupon(Integer codigo);
+
     // Gestion de Productos de Confiteria
 
     ProductoConfiteria obtenerProductoConfiteria(Integer codigo) throws Exception;
@@ -82,5 +88,5 @@ public interface AdministradorPlataformaServicio {
 
     List<Ciudad> listarCiudades();
 
-    List<Funcion> obtenerFuncionesPorCiudadPelicula(Integer codigoPe, Integer codigoCiu) throws Exception;
+    List<Funcion> obtenerFuncionesPorTeatroPelicula(Integer codigoPe, Integer codigoTeatro) throws Exception;
 }

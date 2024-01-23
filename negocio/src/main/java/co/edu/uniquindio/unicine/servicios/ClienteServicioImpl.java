@@ -8,6 +8,7 @@ import co.edu.uniquindio.unicine.repositorios.*;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jasypt.util.text.AES256TextEncryptor;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +22,15 @@ public class ClienteServicioImpl implements ClienteServicio {
     private final EmailService emailService;
     private final FuncionRepo funcionRepo;
     private final ClienteCuponRepo clienteCuponRepo;
-
     private final CiudadRepo ciudadRepo;
     private final PQRSRepo pqrsRepo;
 
-    public ClienteServicioImpl(ClienteRepo clienteRepo, PeliculaRepo peliculaRepo, CompraRepo compraRepo, EmailService emailService, FuncionRepo funcionRepo, ClienteCuponRepo clienteCuponRepo, CiudadRepo ciudadRepo, PQRSRepo pqrsRepo) {
+    private final CompraConfiteriaRepo compraConfiteriaRepo;
+
+    private final EntradaRepo entradaRepo;
+    private final ProductoConfiteriaRepo productoConfiteriaRepo;
+
+    public ClienteServicioImpl(ClienteRepo clienteRepo, PeliculaRepo peliculaRepo, CompraRepo compraRepo, EmailService emailService, FuncionRepo funcionRepo, ClienteCuponRepo clienteCuponRepo, CiudadRepo ciudadRepo, PQRSRepo pqrsRepo, CompraConfiteriaRepo compraConfiteriaRepo, EntradaRepo entradaRepo, ProductoConfiteriaRepo productoConfiteriaRepo) {
         this.clienteRepo = clienteRepo;
         this.peliculaRepo = peliculaRepo;
         this.compraRepo = compraRepo;
@@ -34,6 +39,9 @@ public class ClienteServicioImpl implements ClienteServicio {
         this.clienteCuponRepo = clienteCuponRepo;
         this.ciudadRepo = ciudadRepo;
         this.pqrsRepo = pqrsRepo;
+        this.compraConfiteriaRepo = compraConfiteriaRepo;
+        this.entradaRepo = entradaRepo;
+        this.productoConfiteriaRepo = productoConfiteriaRepo;
     }
 
     //Implementaciones
@@ -101,13 +109,42 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public Compra iniciarCompra(Cliente cliente, Funcion funcion) throws Exception {
+    public Compra realizarCompra(Compra compra) throws Exception {
 
-        if (!verificarExistenciaCliente(cliente.getCedula())) throw new Exception("La compra no tiene asociado un cliente válido.");
-        if (!verificarExistenciaFuncion(funcion)) throw new Exception("La funcion escogida no existe o no es válida.");
-        Compra compra = Compra.builder().cliente(cliente).funcion(funcion).build();
-        compra.setEstado(1);
-        return compraRepo.save(compra);
+        if(!compra.getEstado().equals("CREADA")) throw new Exception("No se ha realizado correctamente el proceso de compra.");
+
+        boolean clienteExiste = verificarExistenciaCliente(compra.getCliente().getCedula());
+        if (!clienteExiste) throw new Exception("La compra no tiene asociado un cliente válido.");
+
+        boolean productosConfiteriaExisten = verificarProductosConfiteria(compra.getComprasConfiteria());
+        if (!productosConfiteriaExisten) throw new Exception("Los productos de confitería escogidos no existen.");
+
+        boolean funcionValida = verificarExistenciaFuncion(compra.getFuncion()) ;
+        if (!funcionValida) throw new Exception("La funcion escogida no existe o no es válida.");
+
+        boolean cuponValido = verificarValidezCupon(compra.getClienteCupon());
+        if (!cuponValido) throw new Exception("El cupón ingresado no es válido");
+
+        boolean medioPagoValido = verificarMedioPago(compra.getMedioDePago());
+        if (!medioPagoValido) throw new Exception("El medio de pago seleccionado no es correcto.");
+
+
+        if(compra.getClienteCupon() != null) compra.getClienteCupon().setEstado("REDIMIDO");
+
+        compra.setFechaCompra(LocalDateTime.now());
+        compra.setEstado("COMPLETADA");
+        compra.actualizarPrecioTotal();
+
+        Compra compraRealizada = compraRepo.save(compra);
+
+        //TODO redireccionar al detalle de la compra
+        emailService.enviarEmail("¡Compra realizada con éxito!",
+                "La información de tu compra: \n" + "Código de la compra: " + compraRealizada.getCodigo() + "; " +
+                        "función: " + compraRealizada.getFuncion().getPelicula().getNombre() + "; " +
+                        "ubicación: " + compraRealizada.getFuncion().getSala().getTeatro().getNombre() + ", "+ compraRealizada.getFuncion().getSala().getTeatro().getDireccion() + "; " +
+                        "total: " + compraRealizada.getPrecioTotal(),
+                compra.getCliente().getEmail());
+        return compraRealizada;
     }
 
     private boolean verificarExistenciaCliente(String cedula) {
@@ -120,103 +157,17 @@ public class ClienteServicioImpl implements ClienteServicio {
         return (funcionExiste != null);
     }
 
-    @Override
-    public Compra asignarEntrada(Compra compra, List<Entrada> entradas) throws Exception {
+    private boolean verificarProductosConfiteria(List<CompraConfiteria> comprasConfiteria) {
 
-        if (compra.getEstado() < 1 || compra.getEstado() == 5) throw new Exception("La compra no ha sido asignada a ninguna función o cliente.");
-        if (entradas.isEmpty()) throw new Exception("No se seleccionó ningún asiento");
-
-        boolean entradasValidas = verificarEntradas(compra.getFuncion(), entradas);
-
-        if (!entradasValidas) throw new Exception("Las sillas escogidas no son válidas");
-
-        compra.setEntradas(entradas);
-        compra.setEstado(2);
-        compra.actualizarPrecioTotal();
-        return compraRepo.save(compra);
-    }
-
-    private boolean verificarEntradas(Funcion funcion, List<Entrada> entradas) throws Exception{
-
-        List<Entrada> entradasFuncion = funcionRepo.obtenerEntradasFuncion(funcion.getCodigo());
-        if (entradasFuncion.isEmpty()) return true;
-
-        char fila;
-        int columna;
-        for (Entrada entrada : entradasFuncion) {
-            for (Entrada entradaEscogida : entradas) {
-                if (entradaEscogida == null) return false;
-                fila = entradaEscogida.getFila();
-                columna = entradaEscogida.getColumna();
-                if (entrada.getFila() == fila && entrada.getColumna() == columna)
-                    return false;
+        if (comprasConfiteria.isEmpty()) {
+            return true;
+        } else {
+            for (CompraConfiteria compraConfiteria : comprasConfiteria) {
+                ProductoConfiteria productoConfiteria = compraRepo.obtenerProductoConfiteria(compraConfiteria.getProductoConfiteria().getCodigo());
+                if (productoConfiteria == null) return false;
             }
         }
         return true;
-    }
-
-    private Integer hallarNumeroFila(Character letra, Integer columna) {
-        if (letra == 'A') return 0;
-        if (letra == 'B') return columna + 1;
-        if (letra == 'C') return (columna*2) + 2;
-        if (letra == 'D') return (columna*3) + 3;
-        if (letra == 'E') return (columna*4) + 4;
-        if (letra == 'F') return (columna*5) + 5;
-        if (letra == 'G') return (columna*6) + 6;
-        if (letra == 'H') return (columna*7) + 7;
-        if (letra == 'I') return (columna*8) + 8;
-        if (letra == 'J') return (columna*9) + 9;
-        return null;
-    }
-
-    @Override
-    public Compra asignarComprasConfiteria(Compra compra, List<CompraConfiteria> comprasConfiteria) throws Exception {
-
-        if (compra.getEstado() < 2) throw new Exception("Ninguna silla ha sido escogida en la compra.");
-
-        if (comprasConfiteria.isEmpty()) {
-            compra.setComprasConfiteria(null);
-            compra.setEstado(3);
-            return compraRepo.save(compra);
-        }
-
-        boolean comprasConfiteriaValidas = verificarProductosConfiteria(comprasConfiteria);
-        if (!comprasConfiteriaValidas) throw new Exception("Los productos de la confiteria seleccionados no existen");
-
-        compra.setComprasConfiteria(comprasConfiteria);
-        compra.setEstado(3);
-        compra.actualizarPrecioTotal();
-        return compraRepo.save(compra);
-    }
-
-    private boolean verificarProductosConfiteria(List<CompraConfiteria> comprasConfiteria) {
-
-        for (CompraConfiteria compraConfiteria : comprasConfiteria) {
-            ProductoConfiteria productoConfiteria = compraRepo.obtenerProductoConfiteria(compraConfiteria.getCodigo());
-            if (productoConfiteria == null) return false;
-        }
-        return true;
-    }
-
-    @Override
-    public Compra asignarPago(Compra compra, MedioPago medioPago, ClienteCupon clienteCupon) throws Exception {
-
-        if(compra.getEstado() < 3 || compra.getEstado() == 5) throw new Exception("No se ha realizado correctamente el proceso de compra.");
-
-        boolean medioPagoValido = verificarMedioPago(medioPago);
-        if (!medioPagoValido) throw new Exception("El medio de pago seleccionado no es correcto.");
-
-        boolean cuponValido =verificarValidezCupon(clienteCupon);
-        if (!cuponValido) throw new Exception("El cupón seleccionado para redimir no es válido.");
-
-        if(clienteCupon != null) clienteCupon.setEstado("REDIMIDO");
-
-        compra.setMedioDePago(medioPago);
-        compra.setClienteCupon(clienteCupon);
-        compra.actualizarPrecioTotal() ;
-        compra.setEstado(4);
-
-        return compraRepo.save(compra);
     }
 
     private boolean verificarMedioPago(MedioPago medioPago) {
@@ -233,34 +184,9 @@ public class ClienteServicioImpl implements ClienteServicio {
 
         if (cupon == null) return true;
         Cupon cuponCliente = clienteCuponRepo.obtenerCupon(cupon.getCodigo());
-        return (cuponCliente != null && cupon.getEstado().equals("ACTIVO"));
+        return (cuponCliente != null && cupon.getEstado().equals("ACTIVO")); //TODO validar fecha vencimiento y setearlo
     }
 
-    @Override
-    public Compra realizarCompra(Compra compra) throws Exception {
-
-        if(compra.getEstado() < 4 || compra.getEstado() == 5) throw new Exception("No se ha realizado correctamente el proceso de compra.");
-
-        boolean clienteExiste = verificarExistenciaCliente(compra.getCliente().getCedula());
-        if (!clienteExiste) throw new Exception("La compra no tiene asociado un cliente válido.");
-
-        boolean productosConfiteriaExisten = verificarProductosConfiteria(compra.getComprasConfiteria());
-        if (!productosConfiteriaExisten) throw new Exception("Los productos de confitería escogidos no existen.");
-
-        boolean funcionValida = verificarExistenciaFuncion(compra.getFuncion()) ;
-        if (!funcionValida) throw new Exception("La funcion escogida no existe o no es válida.");
-
-        boolean cuponValido = verificarValidezCupon(compra.getClienteCupon());
-        if (!cuponValido) throw new Exception("El cupón ingresado no es válido");
-
-        compra.setFechaCompra(LocalDateTime.now());
-        compra.setEstado(5);
-        compra.actualizarPrecioTotal();
-
-        emailService.enviarEmail("¡Compra realizada con éxito!",
-                "La información de tu compra: <br>" + compra, compra.getCliente().getEmail());
-        return compraRepo.save(compra);
-    }
     //Verificar que las entradas estén disponibles
     @Override
     public void cancelarCompra(Integer idCompra) throws Exception {
@@ -269,7 +195,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
         if (!compra.isPresent()) throw new Exception("La compra no fue encontrada.");
 
-        if (compra.get().getEstado() < 5) {
+        if (!compra.get().getEstado().equals("COMPLETADA")) {
             compraRepo.delete(compra.get());
         } else {
             throw new Exception("La compra ya fue realizada, no es posible cancelarla");
@@ -323,8 +249,14 @@ public class ClienteServicioImpl implements ClienteServicio {
 
         if (cliente == null) throw new Exception("El cliente solicitado no existe.");
 
+        AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
+        textEncryptor.setPassword("teclado");
+        String param1 = textEncryptor.encrypt(cliente.getEmail());
+
+        System.out.println("Recién encriptado: " + param1);
+
         emailService.enviarEmail("Cambio de contraseña",
-                "Para reestablecer tu contraseña, accede al siguiente enlace de recuperación: <br> aquí iría el link", cliente.getEmail());
+                "Para reestablecer tu contraseña, accede al siguiente enlace de recuperación: http://localhost:8081/reestablecer_contrasenia.xhtml?p1="+param1, cliente.getEmail());
     }
 
     @Override
@@ -336,6 +268,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         if (!clienteExiste.isPresent()) throw new Exception("El cliente asociado al PQRS no existe.");
 
         PQRS registro = pqrsRepo.save(solicitudPqrs);
+
         emailService.enviarEmail("Solicitud PQRS",
                 "Has realizado una solicitud de pqrs. En aproximadamente 48 horas hábiles te estaremos dando una respuesta.", solicitudPqrs.getCliente().getEmail());
         return registro;
@@ -375,10 +308,59 @@ public class ClienteServicioImpl implements ClienteServicio {
 
         if (guardado == null) throw new Exception("El cliente no existe");
 
+        if (guardado.getEstado().equals("VERIFICADO")) throw new Exception("Esta cuenta ya fue verificada");
+
         guardado.setEstado("VERIFICADO");
         clienteRepo.save(guardado);
 
         //TODO crear el cupon de bienvenida para el cliente guardado
     }
+
+    @Override
+    public void reestablecerContrasenia(String param1, String param2) throws Exception {
+
+        System.out.println("Lo que recibo: " + param1);
+
+        param1 = param1.replace(" ","+");
+
+        AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
+        textEncryptor.setPassword("teclado");
+        String correo = textEncryptor.decrypt(param1);
+
+        System.out.println("Ya desencriptado: " + correo);
+
+        Cliente guardado = clienteRepo.obtenerPorCorreo(correo);
+        if (guardado == null) throw new Exception("El cliente no existe");
+
+        StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
+        guardado.setContrasenia( spe.encryptPassword(param2) );
+
+        clienteRepo.save(guardado);
+    }
+
+    @Override
+    public List<ProductoConfiteria> obtenerProductosConfiteria() {
+        return productoConfiteriaRepo.findAll();
+    }
+
+    @Override
+    public List<Entrada> obtenerEntradasFuncion(Funcion funcion, LocalDate fechaFuncion) throws Exception {
+
+        Optional<Funcion> funcionAux = funcionRepo.findById(funcion.getCodigo());
+        if (!funcionAux.isPresent()) throw new Exception("La función enviada no existe");
+
+        return funcionRepo.obtenerEntradasFuncion(funcion.getCodigo(), fechaFuncion);
+    }
+
+    @Override
+    public void guardarEntrada(Entrada entrada) throws Exception {
+        entradaRepo.save(entrada);
+    }
+
+    @Override
+    public void guardarCompraConfiteria(CompraConfiteria compraConfiteria){
+        compraConfiteriaRepo.save(compraConfiteria);
+    }
+
 
 }

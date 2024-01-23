@@ -23,7 +23,15 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
 
     private final TeatroRepo teatroRepo;
 
-    public AdminTeatroServicioImpl(SalaRepo salaRepo, FuncionRepo funcionRepo, AdministradorTeatroRepo admiTeatroRepo, PQRSRepo PQRSRepo, HorarioRepo horarioRepo, PeliculaRepo peliculaRepo, TeatroRepo teatroRepo) {
+    private final DistribucionSillasRepo distribucionSillasRepo;
+
+    private final TipoSalaRepo tipoSalaRepo;
+
+    public AdminTeatroServicioImpl(SalaRepo salaRepo, FuncionRepo funcionRepo,
+                                   AdministradorTeatroRepo admiTeatroRepo, PQRSRepo PQRSRepo,
+                                   HorarioRepo horarioRepo, PeliculaRepo peliculaRepo,
+                                   TeatroRepo teatroRepo, DistribucionSillasRepo distribucionSillasRepo,
+                                   TipoSalaRepo tipoSalaRepo) {
         this.salaRepo = salaRepo;
         this.funcionRepo = funcionRepo;
         this.admiTeatroRepo = admiTeatroRepo;
@@ -31,13 +39,15 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
         this.horarioRepo = horarioRepo;
         this.peliculaRepo = peliculaRepo;
         this.teatroRepo = teatroRepo;
+        this.distribucionSillasRepo = distribucionSillasRepo;
+        this.tipoSalaRepo = tipoSalaRepo;
     }
 
     @Override
-    public AdministradorTeatro login(String email, String contrasenia)throws Exception {
+    public AdministradorTeatro login(String email, String contrasenia){
         AdministradorTeatro admin = admiTeatroRepo.comprobarAutenticacion(email, contrasenia);
         if(admin == null){
-            throw new Exception("Los datos son incorrectos");
+            return null;
         }
         return admin;
     }
@@ -76,12 +86,12 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
     }
 
     private boolean verificarCodigoFuncion(Integer codigo) {
-       return funcionRepo.findByCodigo(codigo).orElse(null) != null;
+       return funcionRepo.findById(codigo).orElse(null) != null;
     }
 
     @Override
     public Funcion actualizarFuncion(Funcion funcion) throws Exception {
-        Optional<Funcion> guardado = funcionRepo.findByCodigo(funcion.getCodigo());
+        Optional<Funcion> guardado = funcionRepo.findById(funcion.getCodigo());
         if(!guardado.isPresent()){
             throw new Exception("la funcion no existe");
         }
@@ -90,7 +100,7 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
 
     @Override
     public void elimiarFuncion(Integer codigoFuncion) throws Exception{
-        Optional<Funcion> guardado = funcionRepo.findByCodigo(codigoFuncion);
+        Optional<Funcion> guardado = funcionRepo.findById(codigoFuncion);
         if(!guardado.isPresent()){
             throw new Exception("la funcion no existe");
         }
@@ -175,6 +185,11 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
             return s1;
         }
         throw new Exception("Sala no existe");
+    }
+
+    @Override
+    public List<Sala> listarSalaTeatro(Integer codigoTeatro) {
+        return salaRepo.obtenerSalasPorTeatro(codigoTeatro);
     }
 
     @Override
@@ -323,5 +338,34 @@ public class AdminTeatroServicioImpl implements AdminTeatroServicio{
         teatroRepo.save(teatro);
     }
 
+    @Override
+    public List<Teatro> listarTeatrosCiudad(Integer codigoCiudad) throws Exception {
+        return teatroRepo.listarTeatrosCiudad(codigoCiudad);
+    }
+
+    @Override
+    public Teatro obtenerTeatro(int codigoTeatro) throws Exception {
+        return teatroRepo.findById(codigoTeatro).orElse(null);
+    }
+
+    @Override
+    public DistribucionSillas buscarDistribucionSillas(Integer codigo) {
+        return distribucionSillasRepo.findById(codigo).orElse(null);
+    }
+
+    @Override
+    public List<DistribucionSillas> listarDistribucionesSillas() {
+        return distribucionSillasRepo.findAll();
+    }
+
+    @Override
+    public TipoSala buscarTipoSala(Integer codigo) {
+        return tipoSalaRepo.findById(codigo).orElse(null);
+    }
+
+    @Override
+    public List<TipoSala> listarTiposSala() {
+        return tipoSalaRepo.findAll();
+    }
 
 }

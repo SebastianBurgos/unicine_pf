@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Component
+//@Component
 public class SeguridadFiltro implements Filter {
 
     public static final String PAGINA_INICIO = "/index.xhtml";

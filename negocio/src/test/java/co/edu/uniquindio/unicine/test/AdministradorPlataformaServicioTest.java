@@ -113,9 +113,9 @@ public class AdministradorPlataformaServicioTest {
     @Sql("classpath:dataset.sql")
     public void registrarPelicula() {
         Pelicula pelicula = Pelicula.builder().nombre("Harry Potter y El Prisionero de Askaban")
-                .estadoPelicula("EN_CARTELERA").duracion_minutos(180).edad_apropiada(12)
+                .duracion_minutos(180).edad_apropiada(12)
                 .nombre_director("Jk Rowling").nombre_estudio("Warner").sinopsis("Un batman pero mago")
-                .imagen("urlimagen").trailer("urltrailer").build();
+                .trailer("urltrailer").build();
         pelicula.setCodigo(10);
 
         try {
@@ -268,7 +268,7 @@ public class AdministradorPlataformaServicioTest {
     @Sql("classpath:dataset.sql")
     public void registrarProductoConfiteriaTest() {
         ProductoConfiteria productoConfiteria = ProductoConfiteria.builder().nombre("Patatas Alibañesas")
-                        .precio(240000).extras("Salsa Alibañesa").imagen_producto("url_patatas").build();
+                        .precio(240000).extras("Salsa Alibañesa").build();
         productoConfiteria.setCodigo(10);
 
         try {

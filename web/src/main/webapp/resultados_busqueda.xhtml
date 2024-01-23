@@ -12,8 +12,37 @@
     <title>Resultado de busqueda</title>
 </h:head>
 
-<h:body>
-    <h1>Aquí van los resultados :D</h1>
-    <p>#{busquedaBean.peliculas}</p>
-</h:body>
+<ui:composition template="/WEB-INF/template.xhtml" >
+
+    <ui:define name="title">Historial de compras</ui:define>
+
+    <ui:define name="contenido">
+        <div class="container">
+            <div class="row mt-4 mb-4" >
+                <p:panel header="Resultados de búsqueda">
+                    <p:repeat value="#{busquedaBean.peliculas}" var="pelicula" >
+                        <div style="display: compact">
+                            <a href="detalle_pelicula.xhtml?pelicula_id=#{pelicula.codigo}">
+                                <p:card style="align-content: center; align-items: center">
+                                    <div style="display: flex">
+                                        <div>
+                                            <img src="#{pelicula.imagenPrincipal}" alt="Imagen" style="width: 130px; height: 200px"/>
+                                        </div>
+                                        <div style="margin-left: 3%">
+                                            <strong class="d-inline-block me-2 mt-2">Pelicula: </strong> <p:outputLabel value="#{pelicula.nombre}" />
+                                        </div>
+                                        <div style="margin-left: 3%">
+                                            <strong class="d-inline-block me-2 mt-2">Sinopsis: </strong> <p:outputLabel value="#{pelicula.sinopsis}" />
+                                        </div>
+                                    </div>
+                                </p:card>
+                            </a>
+                            <hr />
+                        </div>
+                    </p:repeat>
+                </p:panel>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
 </html>

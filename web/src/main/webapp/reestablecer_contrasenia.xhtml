@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Reestablcer contraseña</ui:define>
+
+    <ui:define name="contenido">
+        <div class="container">
+            <div class="row mt-4 mb-4">
+                <p:panel header="Cambiar contraseña">
+                    <h:form>
+                        <h:panelGrid columns="3" cellpadding="5" styleClass="align-items-center">
+
+                            <p:outputLabel for="contrasenia_cliente" value="Nueva contraseña: "/>
+                            <p:password id="contrasenia_cliente" value="#{reestablecerContraseniaBean.nuevaContresenia}"
+                                        required="true" size="60"/>
+                            <p:message for="contrasenia_cliente"/>
+
+                            <p:outputLabel for="conf_contrasenia_cliente" value="Confirmar contraseña: "/>
+                            <p:password id="conf_contrasenia_cliente" value="#{reestablecerContraseniaBean.confirmarContrasenia}"
+                                        required="true" size="60"/>
+                            <p:message for="conf_contrasenia_cliente"/>
+
+                        </h:panelGrid>
+
+                        <p:commandButton action="#{reestablecerContraseniaBean.reestablecerContrasenia()}" value="Cambiar contraseña" update="@form"/>
+                        <p:growl for="mensaje_bean" showDetail="true"/>
+                    </h:form>
+                </p:panel>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

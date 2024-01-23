@@ -33,6 +33,9 @@ public class InicioBean implements Serializable {
     @Getter @Setter
     private List<Ciudad> ciudades;
 
+    @Getter @Setter
+    private List<Pelicula> peliculasCarrusel;
+
     @Autowired
     private AdministradorPlataformaServicio adminServicio;
 
@@ -46,13 +49,16 @@ public class InicioBean implements Serializable {
     public void init() {
         try {
             imagenes = new ArrayList<>();
-            imagenes.add("https://images5.alphacoders.com/336/336484.jpg");
-            imagenes.add("https://images4.alphacoders.com/909/thumb-1920-909185.jpg");
-            imagenes.add("https://images.hdqwalls.com/wallpapers/the-batman-2021-artwork-b8.jpg");
-
+            peliculasCarrusel = new ArrayList<>();
             peliculasCartelera = clienteServicio.listarPeliculasPorEstado("EN_CARTELERA");
             peliculasProximamente = clienteServicio.listarPeliculasPorEstado("PROXIMAMENTE");
             ciudades = adminServicio.listarCiudades();
+
+            imagenes.add(peliculasCartelera.get(0).getImagenSecundaria());
+            imagenes.add(peliculasCartelera.get(1).getImagenSecundaria());
+            peliculasCarrusel.addAll(peliculasCartelera);
+            peliculasCarrusel.addAll(peliculasProximamente);
+
         } catch (Exception e) {
             e.printStackTrace();
             //FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Peliculas no encontradas", e.getMessage());
@@ -64,7 +70,8 @@ public class InicioBean implements Serializable {
         try {
             if(ciudad != null) {
                 peliculasCartelera = clienteServicio.listarPeliculasPorEstadoCiudad("EN_CARTELERA", ciudad.getCodigo());
-                peliculasProximamente = clienteServicio.listarPeliculasPorEstadoCiudad("PROXIMAMENTE", ciudad.getCodigo());
+
+                peliculasProximamente = clienteServicio.listarPeliculasPorEstado("PROXIMAMENTE");
             }
         } catch (Exception e) {
             e.printStackTrace();

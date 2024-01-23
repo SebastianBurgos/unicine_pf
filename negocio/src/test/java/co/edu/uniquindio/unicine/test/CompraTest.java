@@ -1,10 +1,8 @@
 package co.edu.uniquindio.unicine.test;
 
-import co.edu.uniquindio.unicine.dto.InformacionComprasCliente;
 import co.edu.uniquindio.unicine.entidades.CompraConfiteria;
 import co.edu.uniquindio.unicine.entidades.Entrada;
 import co.edu.uniquindio.unicine.repositorios.CompraRepo;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

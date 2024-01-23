@@ -16,27 +16,30 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
     private final ProductoConfiteriaRepo productoConfiteriaRepo;
     private final CiudadRepo ciudadRepo;
 
+    private final ClienteRepo clienteRepo;
     private final FuncionRepo funcionRepo;
+
+    private final ClienteCuponRepo clienteCuponRepo;
     private final AdministradorPlataformaRepo administradorPlataformaRepo;
 
-    public AdministradorPlataformaServicioImpl(AdministradorTeatroRepo administradorTeatroRepo, PeliculaRepo peliculaRepo, CuponRepo cuponRepo, ProductoConfiteriaRepo productoConfiteriaRepo, CiudadRepo ciudadRepo, FuncionRepo funcionRepo, AdministradorPlataformaRepo administradorPlataformaRepo) {
+    public AdministradorPlataformaServicioImpl(AdministradorTeatroRepo administradorTeatroRepo, PeliculaRepo peliculaRepo, CuponRepo cuponRepo, ProductoConfiteriaRepo productoConfiteriaRepo, CiudadRepo ciudadRepo, ClienteRepo clienteRepo, FuncionRepo funcionRepo, ClienteCuponRepo clienteCuponRepo, AdministradorPlataformaRepo administradorPlataformaRepo) {
         this.administradorTeatroRepo = administradorTeatroRepo;
         this.peliculaRepo = peliculaRepo;
         this.cuponRepo = cuponRepo;
         this.productoConfiteriaRepo = productoConfiteriaRepo;
         this.ciudadRepo = ciudadRepo;
+        this.clienteRepo = clienteRepo;
         this.funcionRepo = funcionRepo;
+        this.clienteCuponRepo = clienteCuponRepo;
         this.administradorPlataformaRepo = administradorPlataformaRepo;
     }
 
-    public AdministradorPlataforma login(String cedula, String contrasenia) throws Exception {
-        AdministradorPlataforma administradorPlataforma = administradorPlataformaRepo.comprobarAutenticacion(cedula, contrasenia);
-
-        if(administradorPlataforma == null){
-            throw new Exception("Los datos ingresados no son válidos");
-        }else{
-            return administradorPlataforma;
+    public AdministradorPlataforma login(String email, String contrasenia){
+        AdministradorPlataforma admin = administradorPlataformaRepo.comprobarAutenticacion(email, contrasenia);
+        if(admin == null){
+            return null;
         }
+        return admin;
     }
 
     @Override
@@ -63,6 +66,11 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
         }
 
         return administradorTeatroRepo.save(administradorTeatro);
+    }
+
+    @Override
+    public ClienteCupon asignarCupon(ClienteCupon clienteCupon) {
+        return clienteCuponRepo.save(clienteCupon);
     }
 
     private boolean verificarExistenciaAdministradorTeatroCorreo(String correo) {
@@ -122,13 +130,7 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
             return peliculaRepo.save(pelicula);
         }
 
-        Optional<Pelicula> peliculaExiste = peliculaRepo.findById(pelicula.getCodigo());
-
-        if (peliculaExiste.isPresent()) {
-            throw new Exception("El codigo ingresado ya está siendo usado para otra pelicula.");
-        } else {
-            return peliculaRepo.save(pelicula);
-        }
+        return null;
     }
 
     @Override
@@ -227,6 +229,15 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
     }
 
     @Override
+    public List<ClienteCupon> listarClienteCupones() {
+        return clienteCuponRepo.findAll();
+    }
+
+    public ClienteCupon obtenerClienteCupon(Integer codigo) {
+        return clienteCuponRepo.findById(codigo).orElse(null);
+    }
+
+    @Override
     public ProductoConfiteria obtenerProductoConfiteria(Integer codigo) throws Exception {
         Optional<ProductoConfiteria> guardado = productoConfiteriaRepo.findById(codigo);
 
@@ -239,13 +250,10 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
 
     @Override
     public ProductoConfiteria registrarProductoConfiteria(ProductoConfiteria productoConfiteria) throws Exception {
-        Optional<ProductoConfiteria> productoConfiteriaExiste = productoConfiteriaRepo.findById(productoConfiteria.getCodigo());
-
-        if (productoConfiteriaExiste.isPresent()) {
-            throw new Exception("El codigo ingresado ya está siendo usado para otro producto de confitería.");
-        } else {
+        if (productoConfiteria.getCodigo() == null) {
             return productoConfiteriaRepo.save(productoConfiteria);
         }
+        return null;
     }
 
     @Override
@@ -330,8 +338,8 @@ public class AdministradorPlataformaServicioImpl implements AdministradorPlatafo
     }
 
     @Override
-    public List<Funcion> obtenerFuncionesPorCiudadPelicula(Integer codigoPelicula, Integer codigoCiudad) throws Exception {
-        return funcionRepo.obtenerFuncionesPorCiudadPelicula(codigoPelicula, codigoCiudad);
+    public List<Funcion> obtenerFuncionesPorTeatroPelicula(Integer codigoPelicula, Integer codigoTeatro) throws Exception {
+        return funcionRepo.obtenerFuncionesPorTeatroPelicula(codigoPelicula, codigoTeatro);
     }
 
 }

@@ -94,4 +94,16 @@ public class Pelicula implements Serializable {
         }
         return "";
     }
+
+    public String getImagenSecundaria() {
+        if (!imagenes.isEmpty()){
+            String segunda = imagenes.keySet().toArray()[1].toString();
+            return imagenes.get(segunda);
+        }
+        return "";
+    }
+
+    public String getSinopsisCorta(){
+        return sinopsis.substring(0, 200)+"...";
+    }
 }

@@ -25,4 +25,7 @@ public interface SalaRepo extends JpaRepository<Sala, Integer> {
     @Query("select s.funciones from Sala s where s.codigo=:codigoSala")
     List<Funcion> obtenerFuncionesSala(Integer codigoSala);
     Optional<Sala> findByCodigo(Integer integer);
+
+    @Query("select s from Sala s where s.teatro.codigo=:codigoTeatro")
+    List<Sala> obtenerSalasPorTeatro(Integer codigoTeatro);
 }

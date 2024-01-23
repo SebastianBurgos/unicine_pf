@@ -65,4 +65,46 @@
     .featurette-heading {
         margin-top: 7rem;
     }
+<<<<<<< HEAD
+=======
+}
+.imagen-confiteria{
+    height: 100px;
+    width: 100px;
+}
+.product{
+    align-self: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 3%;
+}
+.elegir-numero-entradas{
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.iniciar-sesion{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+.btn-registro{
+    text-decoration-line: none;
+}
+.sin-linea a{
+    text-decoration: none;
+}
+
+.item-fila-1{
+    margin-top: 40px;
+}
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+    text-align: end;
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 }

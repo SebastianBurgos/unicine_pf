@@ -35,7 +35,7 @@ public class ClienteCupon implements Serializable {
     private LocalDate fechaVencimiento;
 
     @ToString.Exclude
-    @OneToOne
+    @OneToOne (mappedBy = "clienteCupon")
     private Compra compra;
 
     @Builder

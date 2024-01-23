@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -42,6 +41,8 @@ public class Cliente implements Serializable {
 
     @ElementCollection
     @Column(unique = true, length = 10)
+
+    @ToString.Exclude
     private List<String> telefonos;
 
     @ToString.Exclude
@@ -50,7 +51,6 @@ public class Cliente implements Serializable {
 
     @Column(length = 25)
     private String estado = "NO_VERIFICADO";
-
 
     @Column(nullable = false, length = 200)
     @ToString.Exclude

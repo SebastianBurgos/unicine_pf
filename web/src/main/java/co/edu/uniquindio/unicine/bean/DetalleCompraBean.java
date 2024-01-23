@@ -1,5 +1,7 @@
 package co.edu.uniquindio.unicine.bean;
 
+
+import co.edu.uniquindio.unicine.entidades.Cliente;
 import co.edu.uniquindio.unicine.entidades.Compra;
 import co.edu.uniquindio.unicine.servicios.ClienteServicio;
 import lombok.Getter;
@@ -18,19 +20,34 @@ public class DetalleCompraBean implements Serializable {
 
     @Autowired
     private ClienteServicio clienteServicio;
+
+    @Getter @Setter
+    @Value(value = "#{seguridadBean.cliente}")
+    private Cliente cliente;
+
     @Value("#{param['compra_id']}")
     private String codigoCompra;
 
     @Getter @Setter
     private Compra compra;
 
+    @Getter @Setter
+    private Boolean clienteDiferente, compraEncontrada;
+
     @PostConstruct
     public void init() {
         if (codigoCompra != null && !codigoCompra.isEmpty()) {
             try {
-                compra = clienteServicio.obtenerCompra(Integer.parseInt(codigoCompra));
+                if (cliente != null) {
+                    compra = clienteServicio.obtenerCompra(Integer.parseInt(codigoCompra));
+                    compraEncontrada = true;
+                    if (!compra.getCliente().equals(cliente)) clienteDiferente = true;
+                } else {
+                    clienteDiferente = true;
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                compraEncontrada = false;
+                clienteDiferente = true;
             }
         }
     }

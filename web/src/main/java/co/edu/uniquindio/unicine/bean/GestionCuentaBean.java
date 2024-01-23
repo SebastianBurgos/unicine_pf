@@ -29,7 +29,8 @@ public class GestionCuentaBean implements Serializable {
         if(param1 != null && !param1.isEmpty()) {
             try {
                 clienteServicio.activarCuenta(param1);
-                mensaje = "Cuenta verifica, ¡redime el cupón de bienvenida agregado a tu cuenta! :D";
+
+                mensaje = "Cuenta verificada, ¡redime el cupón de bienvenida agregado a tu cuenta! :D";
 
             } catch (Exception e) {
                 throw new RuntimeException(e);

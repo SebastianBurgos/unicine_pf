@@ -13,23 +13,20 @@
     <ui:define name="contenido">
 
         <div class="imagenes-inicio">
-            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <p:repeat value="#{inicioBean.imagenes}" var="imagen" varStatus="i" >
+
+            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" style="height: 800px; width: 1600px">
+                <div class="carousel-indicators" >
+                    <p:repeat value="#{inicioBean.peliculasCarrusel}" var="pelicula" varStatus="i" >
                         <button type="button" data-bs-target="#{myCarousel}" data-bs-slide-to="#{i.index}" class="#{i.index == 0 ? 'active' : ''}" aria-current="true" aria-label="Slide 1"></button>
                     </p:repeat>
                 </div>
-                <div class="carousel-inner">
-                    <p:repeat value="#{inicioBean.imagenes}" var="imagen" varStatus="i" >
-                        <div class="carousel-item #{i.index == 0 ? 'active' : ''}">
-                            <img src="#{imagen}" alt="Imagen" class="bd-placeholder-img img-carouselz"/>
-
-                            <div class="container">
-                                <div class="carousel-caption text-start">
-                                    <h1>Example headline.</h1>
-                                    <p>Some representative placeholder content for the first slide of the carousel.</p>
-                                    <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
-                                </div>
+                <div class="carousel-innerrr" style="height: 700px; width: 1600px">
+                    <p:repeat value="#{inicioBean.peliculasCarrusel}" var="pelicula" varStatus="i" >
+                        <div class="carousel-item #{i.index == 0 ? 'active' : ''} "  >
+                            <div>
+                                <a href="detalle_pelicula.xhtml?pelicula_id=#{pelicula.codigo}" >
+                                    <img src="#{pelicula.imagenSecundaria}" alt="Imagen" width="1600" height="800"/>
+                                </a>
                             </div>
                         </div>
                     </p:repeat>
@@ -59,7 +56,7 @@
                                         <div class="col p-4 d-flex flex-column position-static">
                                             <div class="d-inline-block mb-2"><p:repeat value="#{pelicula.generos}" var="genero"> <p:chip label="#{genero}" styleClass="me-2 chip-genero"/> </p:repeat></div>
                                             <h3 class="mb-0">#{pelicula.nombre}</h3>
-                                            <p class="card-text mb-auto">#{pelicula.sinopsis}</p>
+                                            <p class="card-text mb-auto">#{pelicula.sinopsisCorta}</p>
                                         </div>
                                         <div class="col-auto d-none d-lg-block imagen-pelicula">
                                             <img src="#{pelicula.imagenPrincipal}" alt="#{pelicula.nombre}"/>
@@ -84,7 +81,7 @@
                                                                                        var="genero"> <p:chip
                                                     label="#{genero}" styleClass="me-2 chip-genero"/> </p:repeat></div>
                                             <h3 class="mb-0">#{pelicula.nombre}</h3>
-                                            <p class="card-text mb-auto">#{pelicula.sinopsis}</p>
+                                            <p class="card-text mb-auto" style="text-decoration-color: black" >#{pelicula.sinopsisCorta}</p>
                                         </div>
                                         <div class="col-auto d-none d-lg-block imagen-pelicula">
                                             <img src="#{pelicula.imagenPrincipal}" alt="#{pelicula.nombre}"/>
@@ -99,26 +96,24 @@
         </div>
 
         <p:dialog id="dialogo_ciudad" widgetVar="dialogo_ciudad" modal="true" visible="#{seguridadBean.ciudad == null ? 'true' : 'false'}"
-                  header="Seleccionar ciudad">
+                  header="Seleccionar ciudad" width="390" blockScroll="true" draggable="false">
             <h:form>
-                <h:panelGrid columns="3" cellpadding="5">
-
-                    <p:outputLabel for="ciudad_origen" value="Ciudad: "/>
-
-                    <p:selectOneMenu id="ciudad_origen" value="#{inicioBean.ciudad}" converter="#{ciudadConverter}">
+                <div style="">
+                    <p:outputLabel for="ciudad_origen" value="Ciudad: " style="margin-right: 10px" />
+                    <p:selectOneMenu id="ciudad_origen" value="#{inicioBean.ciudad}" converter="#{ciudadConverter}" >
                         <f:selectItem itemLabel="Elige la ciudad de la función: " noSelectionOption="true"
                                       itemValue="#{null}"/>
                         <f:selectItems value="#{inicioBean.ciudades}" var="ciudad" itemLabel="#{ciudad.nombre}"
                                        itemValue="#{ciudad}"/>
                         <p:ajax event="change" listener="#{inicioBean.elegirCiudad()}" update="@form, listas_peliculas" />
                     </p:selectOneMenu>
-
                     <p:message for="ciudad_origen"/>
-
-                </h:panelGrid>
-                <p:commandButton value="Seleccionar ciudad" action="#{seguridadBean.seleccionarCiudad(inicioBean.ciudad)}" styleClass="mt-4"
-                                 icon="pi pi-check"
-                                 oncomplete="PF('dialogo_ciudad').hide()"/>
+                </div>
+                <div style="align-items: center; align-content: center; text-align: center; align-self: center">
+                    <p:commandButton value="Seleccionar ciudad" action="#{seguridadBean.seleccionarCiudad(inicioBean.ciudad)}" styleClass="mt-4"
+                                     icon="pi pi-building"
+                                     oncomplete="PF('dialogo_ciudad').hide()"/>
+                </div>
                 <p:growl for="mensaje_bean" showDetail="true"/>
             </h:form>
         </p:dialog>

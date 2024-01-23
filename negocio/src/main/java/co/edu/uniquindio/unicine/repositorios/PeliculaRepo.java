@@ -37,7 +37,7 @@ public interface PeliculaRepo extends JpaRepository<Pelicula, Integer> {
     @Query("select distinct p from Funcion f join f.pelicula p where p.estadoPelicula= :estado and f.sala.teatro.ciudad.codigo= :codigoCiudad")
     List<Pelicula> buscarPeliculasPorEstadoCiudad(String estado, Integer codigoCiudad);
 
-    @Query("select distinct p from Funcion f join f.pelicula p where p.estadoPelicula= :estado")
+    @Query("select p from Pelicula p where p.estadoPelicula= :estado")
     List<Pelicula> buscarPeliculasPorEstado(String estado);
 
     @Query("select p, f from Pelicula p join p.funciones f where lower(p.nombre) like lower(concat('%', :nombre, '%'))  ")

@@ -20,16 +20,28 @@ insert into cliente_telefonos values ("3", "3127586425");
 /*
  (codigo, dia, fechaFin, fechaInicio, hora)
  */
+<<<<<<< HEAD
 insert into horario values (1, "LMXJV", "2022-10-02", "2022-09-20", "16:00");
 insert into horario values (2, "JVSDL", "2022-10-29", "2022-10-15", "14:00");
 insert into horario values (3, "LMXJVS", "2022-10-30", "2022-10-16", "20:00");
 insert into horario values (4, "LMXJV", "2022-11-03", "2022-10-20", "16:00");
 insert into horario values (5, "LMXJV", "2022-11-20", "2022-10-30", "16:00");
+=======
+insert into horario values (1, "LMXJVSD", "2022-12-20", "2022-11-14", "14:00");
+insert into horario values (2, "LMXJVSD", "2022-12-20", "2022-11-14", "16:00");
+insert into horario values (3, "LMXJVSD", "2022-12-20", "2022-11-14", "20:00");
+insert into horario values (4, "LMXJVSD", "2022-12-20", "2022-11-14", "22:00");
+insert into horario values (5, "LMXJVSD", "2022-12-20", "2022-11-14", "12:00");
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, nombre, precioAdicional )
  */
+<<<<<<< HEAD
 insert into tipo_sala values (1, "Estandar", 0);
+=======
+insert into tipo_sala values (1, "Sala 2D", 0);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 insert into tipo_sala values (2, "VIP", 5500);
 insert into tipo_sala values (3, "4D", 9600);
 
@@ -90,6 +102,11 @@ insert into administrador_teatro values ("3000", "1234", "jloasiddi@email.com", 
 insert into administrador_teatro values ("4000", "1234", "jloasi45i@email.com", "urlImagen", "John Freddy Gomez", "3127495409");
 insert into administrador_teatro values ("5000", "1234", "jloasitsi@email.com", "urlImagen", "Alfredo Perez", "3127448409");
 
+<<<<<<< HEAD
+=======
+insert into administrador_plataforma values ("1234", "1234", "admplatunicine@unicine.com", "urlImagen", "Cristiano Ronaldo Messi", "3124545343");
+
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 /*
  (codigo, direccion, nombre, cedulaAdministrador, codigoCiudad)
  */
@@ -129,11 +146,29 @@ insert into pelicula values (4, 190, 7, "PROXIMAMENTE", "Avatar: El Camino Del A
 insert into pelicula values (5, 102, 7, "PROXIMAMENTE", "Un Mundo Extraño",
                              "Don Hall (Director), Qui Nguyen (Co-Director).", "Walt Disney Studios Motion Pictures", "La nueva película de Walt Disney Animation Studios, presenta un viaje de acción y aventura que transcurre en una tierra inexplorada y traicionera, donde criaturas fantásticas aguardan a los legendarios Clade, una familia de exploradores cuyas diferencias amenazan con derribar su última misión que es, por lejos, la más decisiva.", "https://www.youtube.com/watch?v=LvIMiuYG6KQ&ab_channel=DisneyLatinoam%C3%A9rica");
 
+<<<<<<< HEAD
 insert into pelicula_imagenes values (1, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454030/unicine/peliculas/cc8fdbb388a4-480x670_kpbojz.jpg", "unicine/peliculas/cc8fdbb388a4-480x670_kpbojz");
 insert into pelicula_imagenes values (2, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668453992/unicine/peliculas/cb55daaeb245-480x670-3_hb8k2s.png", "unicine/peliculas/cb55daaeb245-480x670-3_hb8k2s");
 insert into pelicula_imagenes values (3, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454138/unicine/peliculas/la-luz-del-diablo-poster_lai5xs.jpg", "unicine/peliculas/la-luz-del-diablo-poster_lai5xs");
 insert into pelicula_imagenes values (4, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454068/unicine/peliculas/86c502a6cc59-poster-avatar-el-camino-del-agua_r2utxd.jpg", "unicine/peliculas/86c502a6cc59-poster-avatar-el-camino-del-agua_r2utxd");
 insert into pelicula_imagenes values (5, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668453961/unicine/peliculas/mundoextranio_ubeg9c.jpg", "unicine/peliculas/mundoextranio_ubeg9c");
+=======
+/* Pelicula codigo, url imagen, ruta imagen */
+insert into pelicula_imagenes values (1, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454030/unicine/peliculas/cc8fdbb388a4-480x670_kpbojz.jpg", "unicine/peliculas/cc8fdbb388a4-480x670_kpbojz");
+insert into pelicula_imagenes values (1, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668697733/unicine/peliculas/wakanda2_jtm9pj.jpg", "unicine/peliculas/wakanda2_jtm9pj");
+insert into pelicula_imagenes values (2, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668453992/unicine/peliculas/cb55daaeb245-480x670-3_hb8k2s.png", "unicine/peliculas/cb55daaeb245-480x670-3_hb8k2s");
+insert into pelicula_imagenes values (2, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668697784/unicine/peliculas/black-adam2_lmqdu2.jpg", "unicine/peliculas/black-adam2_lmqdu2");
+
+insert into pelicula_imagenes values (3, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454138/unicine/peliculas/la-luz-del-diablo-1-aposter_lai5xs.jpg", "unicine/peliculas/la-luz-del-diablo-1-aposter_lai5xs");
+insert into pelicula_imagenes values (3, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668697841/unicine/peliculas/la-luz-del-diablo-2-banner_bd7fg8.jpg", "unicine/peliculas/la-luz-del-diablo-2-banner_bd7fg8");
+
+insert into pelicula_imagenes values (4, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668454068/unicine/peliculas/86c502a6cc59-poster-avatar-el-camino-del-agua_r2utxd.jpg", "unicine/peliculas/86c502a6cc59-poster-avatar-el-camino-del-agua_r2utxd");
+insert into pelicula_imagenes values (4, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668697542/unicine/peliculas/avatar2_wx6ypt.jpg", "unicine/peliculas/avatar2_wx6ypt");
+
+insert into pelicula_imagenes values (5, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668697889/unicine/peliculas/mundoextranio-2-cil8ay.jpg", "unicine/peliculas/mundoextranio-2-cil8ay");
+insert into pelicula_imagenes values (5, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668453961/unicine/peliculas/mundoextranio-1-aubeg9c.jpg", "unicine/peliculas/mundoextranio-1-aubeg9c");
+
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 /*
  (codigoPelicula, genero)
  */
@@ -144,11 +179,16 @@ insert into pelicula_generos values (2, "FANTASIA");
 insert into pelicula_generos values (3, "DOCUMENTAL");
 insert into pelicula_generos values (4, "AVENTURA");
 insert into pelicula_generos values (4, "ACCION");
+<<<<<<< HEAD
 insert into pelicula_generos values (5, "TERROR");
+=======
+insert into pelicula_generos values (5, "ANIMADA");
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, precioFuncion, codigoHorario, codigoPelicula, codigoSala)
  */
+<<<<<<< HEAD
 insert into funcion values (1, 7500, 1, 4, 1);
 insert into funcion values (2, 8000, 3, 3, 3);
 insert into funcion values (3, 7500, 2, 1, 4);
@@ -170,6 +210,25 @@ insert into compra values (6, 1, null, null, null, "1", 5);
 insert into compra values (7, 2, null, null, null, "1", 5);
 insert into compra values (8, 3, null, null, null, "1", 5);
 insert into compra values (9, 4, null, "NEQUI", null, "1", 5);
+=======
+insert into funcion values (1, 7500, 1, 1, 1);
+insert into funcion values (2, 8000, 3, 3, 3);
+insert into funcion values (3, 7500, 2, 1, 2);
+insert into funcion values (4, 8000, 5, 2, 2);
+insert into funcion values (5, 7500, 5, 1, 4);
+insert into funcion values (6, 7500, 4, 3, 5);
+insert into funcion values (7, 7500, 3, 1, 7);
+insert into funcion values (8, 7500, 1, 2, 6);
+
+/*
+ (codigo, estado, fechaCompra, fechaPelicula, medioPago, PrecioTotal, clienteCedula, funcionCodigo)
+ */
+insert into compra values (1, "CREADA", "2022-10-15", "2022-10-15" , "2022-10-15", "MASTERCARD", 25600, "1", null, 1);
+insert into compra values (2, "CREADA", "2022-10-18", "2022-10-15" , "2022-10-15", "MASTERCARD", 82600, "1", null, 2);
+insert into compra values (3, "CREADA", "2022-10-19","2022-10-15", "2022-10-15", "MASTERCARD", 29600, "3", null, 3);
+insert into compra values (4, "CREADA", "2022-10-26","2022-10-15", "2022-10-15", "MASTERCARD", 118400, "4", null, 4);
+insert into compra values (5, "CREADA", "2022-10-30","2022-10-15" , "2022-10-15", "MASTERCARD", 35600, "1", null, 5);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, concepto, descuento)
@@ -182,15 +241,24 @@ insert into cupon values (4, "Descuento de VIP", 10);
 /*
  (codigo, estado, fechaVencimiento, clienteCedula, compraCodigo, cuponCodigo)
  */
+<<<<<<< HEAD
 insert into cliente_cupon values (1, "ACTIVO", "2022-10-31", "1", 9, 1);
 insert into cliente_cupon values (2, "REDIMIDO", "2022-10-31", "2", null, 1);
 insert into cliente_cupon values (3, "ACTIVO", "2022-11-06", "1", null, 2);
 insert into cliente_cupon values (4, "VENCIDO", "2022-11-09", "3", null, 3);
 insert into cliente_cupon values (5, "ACTIVO", "2022-11-15", "4", null, 3);
+=======
+insert into cliente_cupon values (1, "ACTIVO", "2022-10-31", "1", 1);
+insert into cliente_cupon values (2, "REDIMIDO", "2022-10-31", "2", 1);
+insert into cliente_cupon values (3, "ACTIVO", "2022-11-06", "1", 2);
+insert into cliente_cupon values (4, "VENCIDO", "2022-11-09", "3", 3);
+insert into cliente_cupon values (5, "ACTIVO", "2022-11-15", "4", 3);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, columna, fila, precio, compraCodigo)
  */
+<<<<<<< HEAD
 insert into entrada values (1, 11, 'A', 7800, 7); --Estado entradas
 insert into entrada values (2, 10, 'A', 7800, 7);
 
@@ -200,26 +268,53 @@ insert into entrada values (10, 11, 'D', 7800, 8);
 insert into entrada values (11, 11, 'D', 7800, 9); -- Estado confiteria
 insert into entrada values (12, 11, 'D', 7800, 9);
 
+=======
+insert into entrada values (1, 11, 'A', 7800, 1);
+insert into entrada values (2, 10, 'A', 7800, 1);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 insert into entrada values (3, 8, 'F', 7800, 2);
 insert into entrada values (4, 10, 'G', 7800, 3);
 insert into entrada values (5, 5, 'J', 7800, 5);
 insert into entrada values (6, 6, 'J', 7800, 4);
 insert into entrada values (7, 9, 'B', 6000, 1);
 insert into entrada values (8, 10, 'B', 6000, 1);
+<<<<<<< HEAD
+=======
+insert into entrada values (9, 11, 'D', 7800, 2);
+insert into entrada values (10, 11, 'D', 7800, 2);
+insert into entrada values (11, 11, 'D', 7800, 3);
+insert into entrada values (12, 11, 'D', 7800, 3);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, extras, imagenProducto, nombre, precio)
  */
 
+<<<<<<< HEAD
 insert into producto_confiteria values (1, null, "url-imagen-producto", "Combo 1", 22000);
 insert into producto_confiteria values (2, null, "url-imagen-producto", "Combo 2", 18000);
 insert into producto_confiteria values (3, null, "url-imagen-producto", "Combo 3", 35600);
 insert into producto_confiteria values (4, null, "url-imagen-producto", "Combo 4", 12000);
 insert into producto_confiteria values (5, null, "url-imagen-producto", "Combo 5", 26800);
+=======
+insert into producto_confiteria values (1, null, "Combo 1", 22000);
+insert into producto_confiteria values (2, null, "Combo 2", 18000);
+insert into producto_confiteria values (3, null, "Combo 3", 35600);
+insert into producto_confiteria values (4, null, "Combo 4", 12000);
+insert into producto_confiteria values (5, null, "Combo 5", 26800);
+
+insert into producto_confiteria_imagen_producto values (1, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668484854/unicine/confiteria/borrar_ckwag1.png", "unicine/confiteria/borrar_ckwag1");
+insert into producto_confiteria_imagen_producto values (2, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668484854/unicine/confiteria/borrar_ckwag1.png", "unicine/confiteria/borrar_ckwag1");
+insert into producto_confiteria_imagen_producto values (3, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668484854/unicine/confiteria/borrar_ckwag1.png", "unicine/confiteria/borrar_ckwag1");
+insert into producto_confiteria_imagen_producto values (4, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668484854/unicine/confiteria/borrar_ckwag1.png", "unicine/confiteria/borrar_ckwag1");
+insert into producto_confiteria_imagen_producto values (5, "https://res.cloudinary.com/djrslfkmr/image/upload/v1668484854/unicine/confiteria/borrar_ckwag1.png", "unicine/confiteria/borrar_ckwag1");
+
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 /*
  (codigo, precio, unidades, compraCodigo, productoConfiteriaCodigo)
  */
+<<<<<<< HEAD
 insert into compra_confiteria values (1, 24000, 2, 8, 4);
 insert into compra_confiteria values (2, 22000, 1, 8, 1);
 
@@ -229,6 +324,15 @@ insert into compra_confiteria values (7, 22000, 1, 9, 1);
 insert into compra_confiteria values (3, 54000, 3, 3, 2);
 insert into compra_confiteria values (4, 24000, 2, 1, 4);
 insert into compra_confiteria values (5, 35600, 1, 5, 3);
+=======
+insert into compra_confiteria values (1, 24000, 2, 1, 4);
+insert into compra_confiteria values (2, 22000, 1, 1, 1);
+insert into compra_confiteria values (3, 54000, 3, 2, 2);
+insert into compra_confiteria values (4, 24000, 2, 3, 4);
+insert into compra_confiteria values (5, 35600, 1, 3, 3);
+insert into compra_confiteria values (6, 24000, 2, 4, 4);
+insert into compra_confiteria values (7, 22000, 1, 5, 1);
+>>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 
 insert into pqrs values (1, "2022-10-15", "Aquí va el mensaje 1", "Motivo de la solicitud 1", "1");
 insert into pqrs values (2, "2022-10-15", "Aquí va el mensaje 2", "Motivo de la solicitud 2", "1");
