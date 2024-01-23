@@ -1,6 +1,4 @@
 co.edu.uniquindio.unicine.converter.CiudadConverter
-<<<<<<< HEAD
-=======
 co.edu.uniquindio.unicine.converter.ClienteConverter
 co.edu.uniquindio.unicine.converter.ClienteCuponConverter
 co.edu.uniquindio.unicine.converter.DistribucionSillasConverter
@@ -9,7 +7,6 @@ co.edu.uniquindio.unicine.converter.PeliculaConverter
 co.edu.uniquindio.unicine.converter.SalaConverter
 co.edu.uniquindio.unicine.converter.TeatroConverter
 co.edu.uniquindio.unicine.converter.TipoSalaConverter
->>>>>>> 37122e69d320f46eb2f37a33640acc1e8cd22884
 com.sun.faces.cdi.CdiConverter
 com.sun.faces.cdi.CdiValidator
 com.sun.faces.component.ComponentResourceContainer

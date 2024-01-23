@@ -14,18 +14,18 @@
 
         <div class="imagenes-inicio">
 
-            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" style="height: 800px; width: 1600px">
+            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" style="width: 100%; height: 400px;">
                 <div class="carousel-indicators" >
                     <p:repeat value="#{inicioBean.peliculasCarrusel}" var="pelicula" varStatus="i" >
                         <button type="button" data-bs-target="#{myCarousel}" data-bs-slide-to="#{i.index}" class="#{i.index == 0 ? 'active' : ''}" aria-current="true" aria-label="Slide 1"></button>
                     </p:repeat>
                 </div>
-                <div class="carousel-innerrr" style="height: 700px; width: 1600px">
+                <div class="carousel-innerrr" style="height: 600px;">
                     <p:repeat value="#{inicioBean.peliculasCarrusel}" var="pelicula" varStatus="i" >
                         <div class="carousel-item #{i.index == 0 ? 'active' : ''} "  >
                             <div>
                                 <a href="detalle_pelicula.xhtml?pelicula_id=#{pelicula.codigo}" >
-                                    <img src="#{pelicula.imagenSecundaria}" alt="Imagen" width="1600" height="800"/>
+                                    <img src="#{pelicula.imagenSecundaria}" alt="Imagen" style="width: 100%; height: 400px;"/>
                                 </a>
                             </div>
                         </div>
